@@ -87,14 +87,18 @@
 </html>
 <script>
     let showvideo = document.getElementById('showvideo')
+    
     async function searchVideos() {
+        document.getElementById('showvideo').innerHTML=""
         let videos = document.getElementById('videos').value
         let resolve = await fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${videos}&type=video&key=AIzaSyA00OxUbfdfVAjHn-9l48s0t-n_j7CBbNs&maxResults=25`)
         let data = await resolve.json()
         for({id:{videoId}} of data.items){
             let videoframe=document.createElement("iframe")
+            videoframe.setAttribute("class","frame")
         videoframe.src=`https://www.youtube.com/embed/${videoId}`
         videoframe.allow=`fullscreen`
+        
         showvideo.append(videoframe);
        
       }
@@ -111,14 +115,7 @@ async function show() {
         videoframe.src=`https://www.youtube.com/embed/${videoId}`
         videoframe.allow=`fullscreen`
         showvideo.append(videoframe);
-       
-      }
-       
+     }
 }
-show()
-   
-    
-
-
-
+     show()
 </script>
