@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <style>
+        *{
+            margin: 0; padding: 0; box-sizing: border-box;
+        }
+        nav{
+            width: 100%;
+            display: flex;
+            position: fixed;
+            top: 0;
+            background-color: white;
+        }
+        #logo{width: 20%;padding: 20px; }
+        #search{width: 60%;padding: 20px;}
+        #icons{width: 20%;padding: 20px;}
+        #logo a{
+            margin-left: 10px;
+            margin-top: 15px;
+        }
+        #icons ul{
+            display: flex; justify-content: right;
+            padding-top: 8px;
+           }
+        #icons ul li{
+            list-style-type: none;  
+            margin-right: 20px;
+        }
+        #search input{
+           width: 75%;
+           height: 35px;
+           margin: 0;
+        }
+        #search button{
+            width: 15%;
+            margin-left: -10px;
+            height:35px;
+            background-color: white;
+            border: 1px solid gray;
+        }
+        .frame{
+            width: 31%;
+            margin: 1%;
+            height: 200px;
+        }
+        #showvideo{
+            margin-top: 80px;
+        }
+       
+    </style>
+    
+</head>
+
+<body>
+    <nav>
+        <div id="logo">
+            <a href=""><i class="fas fa-bars" style="color: black;"></i></a>
+            <a href=""><i class="fab fa-youtube" style="font-size:x-large;color: red;"><h1 style=" text-decoration: none;color: black;font-size: x-large;float: right;margin-top: 0px;">YouTube</h1></i></a>
+        </div>
+        <div id="search">
+            <input type="text" placeholder="serach for videos" id="videos">
+            <button onclick="searchVideos()">search</button>
+            <a href=""><i class="fas fa-microphone" style="background: transparent;color: black; font-size: large;"></i></a>
+        </div>
+        <div id="icons">
+            <ul>
+                <li><a href=""><i class="fas fa-video" style="background: transparent;color: black; font-size: large;"></i></a> </li>
+                <li><a href=""><i class="fas fa-ellipsis-v" style="background: transparent;color: black; font-size: large;"></i><i class="fas fa-ellipsis-v"style="background: transparent;color: black;font-size: large;"></i><i class="fas fa-ellipsis-v"style="background: transparent;color: black;font-size: large;"></i></a> </li>
+                <li><a href=""><i class="fas fa-bell" style="background: transparent;color: black; font-size: large;"></i></a> </li>
+                <li><a href=""><i class="fas fa-user-circle" style="background: transparent;color: black; font-size: large;"></i></a> </li>
+            </ul>
+            
+        </div>
+    </nav>
+    
+    <div id="showvideo"></div>
+   
+</body>
+
+</html>
+<script>
+    let showvideo = document.getElementById('showvideo')
+    async function searchVideos() {
+        let videos = document.getElementById('videos').value
+        let resolve = await fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${videos}&type=video&key=AIzaSyA00OxUbfdfVAjHn-9l48s0t-n_j7CBbNs&maxResults=25`)
+        let data = await resolve.json()
+        for({id:{videoId}} of data.items){
+            let videoframe=document.createElement("iframe")
+        videoframe.src=`https://www.youtube.com/embed/${videoId}`
+        videoframe.allow=`fullscreen`
+        showvideo.append(videoframe);
+       
+      }
+       
+}
+
+async function show() {
+        
+        let resolve = await fetch(`https://youtube.googleapis.com/youtube/v3/search?q=popular%20videos&type=videos&key=AIzaSyA00OxUbfdfVAjHn-9l48s0t-n_j7CBbNs&maxResults=25`)
+        let data = await resolve.json()
+        for({id:{videoId}} of data.items){
+            let videoframe=document.createElement("iframe")
+            videoframe.setAttribute("class","frame")
+        videoframe.src=`https://www.youtube.com/embed/${videoId}`
+        videoframe.allow=`fullscreen`
+        showvideo.append(videoframe);
+       
+      }
+       
+}
+show()
+   
+    
+
+
+
+</script>
