@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      *{
+          margin: 0;
+          box-sizing: border-box;
+      }
+       
+        .centre{
+            z-index: 3;
+            position: absolute;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+            height: 100vh;
+        }
+        #main .centre h1{
+            margin-top: 6%;
+            font-size: 8rem;
+            font-family: sans-serif;
+            font-weight: 900;
+            background: transparent;
+            color: yellow;
+        }
+        #main .centre input{
+            
+            width: 50%;
+            margin-top: 50px;
+            height: 50px;
+            color:rgb(185, 29, 29);
+            opacity: 0.6;
+            font-weight: 900;
+            font-family: sans-serif;
+            border-radius: 20px;
+            font-size: 24px;
+            border: none;
+            outline: none;
+            padding-left: 20px;
+            
+        }
+      .container{
+          position: absolute;
+          top: 0;
+          left: 0;
+        
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+          
+      }
+      #data{
+          width: 51%;
+          
+          overflow-y: scroll;
+          max-height: 300px;
+          background: white;
+          opacity: 0.6;
+          
+          margin-left: 375px;
+         
+          border-radius: 5px;
+
+          
+      }
+      .finaldiv{
+        border-top: 1px solid brown;
+      }
+      .finaldiv h2{
+          text-align: left;
+          padding-left: 5px;
+      }
+      .finaldiv p{
+          text-align: left;
+          padding-left: 6px;
+          color: rgb(221, 74, 6);
+          font-weight: bold;
+      }
+     
+
+
+      
+
+    </style>
+</head>
+<body>
+    <div id="main">
+        <div class="centre">
+            <h1>Star Wars</h1>
+        <input type="text" oninput="debounce(main,500)" placeholder="search here" id="inp">
+        <div id="data"></div>
+        </div>
+        
+        <div class="container">
+            <video  autoplay loop muted>
+                <source src="Blue_Particles_in_Space.mov">
+            </video>
+        
+        </div>
+           
+           
+    </div>
+</body>
+</html>
+<script>
+    var timerId;
+    let movieDiv=document.getElementById("data")
+    async function searchMovies(n){
+        let res = await fetch(`https://swapi.dev/api/people/?search=${n}`) 
+        let data= await res.json();
+        console.log(data);
+        return data.results
+        
+    }
+       
+
+    function appendMovies(m){
+      m.forEach( ({name,gender,birth_year}) =>{
+           let p=document.createElement('h2')
+           let p1=document.createElement('p')
+           let finaldiv=document.createElement("div")
+           finaldiv.setAttribute("class","finaldiv")
+           p.innerText=name
+           p1.innerText=birth_year
+           finaldiv.append(p,p1)
+           let link=document.createElement("a")
+           link.append(finaldiv)
+           movieDiv.append(link);
+      })
+    }
+
+    async function main(){
+        movieDiv.innerHTML=""
+        var name=document.getElementById("inp").value
+       
+        let movies = await searchMovies(name)
+        if(movies==undefined){
+            return false
+        }
+        appendMovies(movies)
+        console.log(movies);
+    }
+
+    function debounce(func,delay){
+        var name=document.getElementById("inp").value
+        if(name.length<1){
+            movieDiv.innerHTML=""
+            return false;
+        }
+        
+        if(timerId){
+            clearTimeout(timerId);
+        }
+       timerId= setTimeout(()=>{
+            func();
+        },delay)
+    }
+</script>
